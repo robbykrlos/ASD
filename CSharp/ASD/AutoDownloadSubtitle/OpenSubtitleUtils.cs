@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Net;
@@ -22,7 +20,7 @@ namespace AutoDownloadSubtitle
             }
             else
             {
-                return "[ERROR] Login FAILED!" + displayResponse(responseList);
+                return "[ERROR] Login FAILED!" + responseList[16] + "\r\n";
             }
         }
 
@@ -33,11 +31,11 @@ namespace AutoDownloadSubtitle
             List<string> responseList = processXmlResponse(content);
             if (checkLogout(responseList))
             {
-                return "Logout Sucessfully!";
+                return "Logout Sucessfully!" + "\r\n";
             }
             else
             {
-                return "[ERROR] Logout FAILED!" + displayResponse(responseList);
+                return "[ERROR] Logout FAILED!" + displayResponse(responseList) + "\r\n";
             }
         }
 
@@ -63,6 +61,8 @@ namespace AutoDownloadSubtitle
 
         private static bool checkLogin(List<string> responseList)
         {
+            //displayResponse(responseList);
+
             return
                 responseList[7] == "token" &&
                 responseList[13] == "status" &&
@@ -72,8 +72,8 @@ namespace AutoDownloadSubtitle
 
         private static bool checkLogout(List<string> responseList)
         {
+            //displayResponse(responseList);
 
-           
             return
                 responseList[7] == "status" &&
                 responseList[10] == "200 OK";

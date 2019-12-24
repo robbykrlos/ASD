@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using System.Net;
 using System.IO;
-using System.Xml;
-using ASD;
 using System.IO.Compression;
 
 namespace AutoDownloadSubtitle
 {
-    class Program
+    public static class ASD
     {
         public const int INDEX_PARAM_TARGET_PATH = 0;
         public const int INDEX_PARAM_USERNAME = 1;
@@ -27,21 +22,23 @@ namespace AutoDownloadSubtitle
         public const string OPENSUBTITLES_USERAGENT = "OSTestUserAgentTemp";
         public const string SUB_LANG = "rum,eng";
 
-        static void Main(string[] args)
+        public static string Start(string[] args)
         {
+            string VersionNumber = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-            Console.WriteLine("#############################");
-            Console.WriteLine("# Auto Subtitles Downloader #");
-            Console.WriteLine("#############################");
+            string output = "";
+            output += "##########################################################\r\n";
+            output += "######     Auto Subtitles Downloader  (v"+ VersionNumber + ")    ######\r\n";
+            output += "##########################################################\r\n";
             //first 3 params are mandatory
-            if (args.Length < 3)
+            if (args.Length < 1)
             {
-                Console.WriteLine(" param 0: target folder path");
-                Console.WriteLine(" param 1: username");
-                Console.WriteLine(" param 2: password");
-                Console.WriteLine(" param 3: silent run");
-                Console.WriteLine("#############################");
-                return;
+                output += " param 0 REQ: target folder path\r\n";
+                output += " param 1 OPT: username (works anonymous)\r\n";
+                output += " param 2 OPT: password (works anonymous)\r\n";
+                output += " param 3 OPT: silent run\r\n";
+                output += "##########################################################\r\n";
+                return output;
             }
 
             string OPENSUBTITLES_USERNAME = "";
@@ -50,7 +47,7 @@ namespace AutoDownloadSubtitle
             //READING ARGS
             string rootTargetPath = ".\\";
             bool boolVerboseRun = true;
-            
+
             //PATH
             if (args.Length > INDEX_PARAM_TARGET_PATH && args[INDEX_PARAM_TARGET_PATH] != "")
             {
@@ -58,11 +55,11 @@ namespace AutoDownloadSubtitle
             }
             if (Directory.Exists(rootTargetPath))
             {
-                if (boolVerboseRun) Console.WriteLine("Target directory set : " + rootTargetPath);
+                if (boolVerboseRun) output += "Target directory set : " + rootTargetPath + "\r\n";
             }
             else
             {
-                Console.WriteLine("[ERROR] Invalid target directory : " + rootTargetPath);
+                output += "[ERROR] Invalid target directory : " + rootTargetPath + "\r\n";
             }
 
             //USERNAME AND PASSWORD:
@@ -81,17 +78,18 @@ namespace AutoDownloadSubtitle
             string strLoginToken = OpenSubtitleUtils.Login(URL_RPC, OPENSUBTITLES_USERNAME, OPENSUBTITLES_PASSWORD);
             if (boolVerboseRun)
             {
-                if (strLoginToken != "")
+                if (!strLoginToken.Contains("[ERROR]"))
                 {
-                    Console.WriteLine("Login sucessful - valid token received : " + strLoginToken);
+                    output += "Login SUCCESSFUL - valid token received : " + strLoginToken + "\r\n";
                 }
                 else
                 {
-                    Console.WriteLine("[ERROR] Login FAILED! INVALID token!");
+                    output += strLoginToken + "INVALID token!" + "\r\n";
+                    return output;
                 }
             }
 
-            string[] listFiles = (string[]) Directory.GetFiles(rootTargetPath, "*.*", SearchOption.TopDirectoryOnly).
+            string[] listFiles = (string[])Directory.GetFiles(rootTargetPath, "*.*", SearchOption.TopDirectoryOnly).
                 Where(s => s.EndsWith(".avi") ||
                     s.EndsWith(".dat") ||
                     s.EndsWith(".divx") ||
@@ -125,8 +123,8 @@ namespace AutoDownloadSubtitle
                     s.EndsWith(".xvid")).ToArray();
 
 
-            Console.WriteLine("Fount " + listFiles.Length + " video files. Processing ...");
-            if (boolVerboseRun) Console.WriteLine("-------------------------------------------------------");
+            output += "Fount " + listFiles.Length + " video files. Processing ..." + "\r\n";
+            if (boolVerboseRun) output += "-------------------------------------------------------" + "\r\n";
             foreach (string fileName in listFiles)
             {
                 FileInfo fileInfo = new FileInfo(fileName);
@@ -134,15 +132,15 @@ namespace AutoDownloadSubtitle
                 string gzFile = fileNameNoExtension + ".gz";
                 string subFile = fileNameNoExtension + ".srt";
 
-                if (boolVerboseRun) Console.WriteLine(fileName);
+                if (boolVerboseRun) output += fileName + "\r\n";
                 string strResponseData = OpenSubtitleUtils.SearchSubtitle4Movie(URL_RPC, fileName, strLoginToken);
                 List<string> listReponseSearch = OpenSubtitleUtils.processXmlResponse(strResponseData);
-                for (int i=0; i<listReponseSearch.Count; i++)
+                for (int i = 0; i < listReponseSearch.Count; i++)
                 {
-                    //Console.WriteLine(listReponseSearch[i]);
+                    //output += "listReponseSearch[i]);
                     if (listReponseSearch[i] == "SubDownloadLink")
                     {
-                        if (listReponseSearch[i+3].StartsWith("http"))
+                        if (listReponseSearch[i + 3].StartsWith("http"))
                         {
                             using (var client = new WebClient())
                             {
@@ -152,13 +150,13 @@ namespace AutoDownloadSubtitle
                                 }
                                 catch (Exception e)
                                 {
-                                    Console.WriteLine("[ERROR] " + e.Message);
-                                    Console.WriteLine("Press any key to continue...");
+                                    output += "[ERROR] " + e.Message + "\r\n";
+                                    output += "Press any key to continue..." + "\r\n";
                                     Console.ReadKey();
                                     Environment.Exit(0);
                                 }
 
-                                if (boolVerboseRun) Console.WriteLine("Downloaded : " + gzFile);
+                                if (boolVerboseRun) output += "Downloaded : " + gzFile + "\r\n";
 
                                 using (Stream fd = File.Create(rootTargetPath + subFile))
                                 using (Stream fs = File.OpenRead(rootTargetPath + gzFile))
@@ -171,43 +169,38 @@ namespace AutoDownloadSubtitle
                                         fd.Write(buffer, 0, nRead);
                                     }
                                 }
-                                if (boolVerboseRun) Console.WriteLine("Decompressed : " + subFile);
+                                if (boolVerboseRun) output += "Decompressed : " + subFile + "\r\n";
                                 File.Delete(rootTargetPath + gzFile);
-                                if (boolVerboseRun) Console.WriteLine("Deleted : " + gzFile);
+                                if (boolVerboseRun) output += "Deleted : " + gzFile + "\r\n";
                             }
                             if (boolVerboseRun)
                             {
-                                Console.WriteLine("Successfully saved : " + subFile);
+                                output += "Successfully saved : " + subFile + "\r\n";
                             }
                             else
                             {
-                                Console.Write(".");
+                                output += ".";
                             }
                             break;
                         }
                     }
                     if (i >= listReponseSearch.Count - 1)
                     {
-                        Console.WriteLine("[NOTICE] Subtitle not found for : " + fileName);
+                        output += "[NOTICE] Subtitle not found for : " + fileName + "\r\n";
                     }
                 }
-                //Console.WriteLine(strResponseData);
-                if (boolVerboseRun) Console.WriteLine("-------------------------------------------------------");
+                //output += "strResponseData);
+                if (boolVerboseRun) output += "-------------------------------------------------------" + "\r\n";
             }
 
             //LOGOUT
             if (boolVerboseRun)
             {
-                Console.WriteLine("\r\n" + OpenSubtitleUtils.Logout(URL_RPC, strLoginToken));
+                output += "\r\n" + OpenSubtitleUtils.Logout(URL_RPC, strLoginToken) + "\r\n";
             }
+            output += "DONE!" + "\r\n";
 
-            Console.WriteLine("DONE!");
-
-            if (boolVerboseRun)
-            {
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-            }
+            return output;
         }
     }
 }
