@@ -90,21 +90,6 @@ namespace AutoSubtitleDownloader
                 boolVerboseRun = args[INDEX_PARAM_SILENT_RUN] != "/s" && args[INDEX_PARAM_SILENT_RUN] != "/q";
             }
 
-            //LOGIN
-            string strLoginToken = OpenSubtitleUtils.Login(URL_RPC, OPENSUBTITLES_USERNAME, OPENSUBTITLES_PASSWORD, OPENSUBTITLES_USERAGENT, OPENSUBTITLES_COMMUNICATION_LANG);
-            if (boolVerboseRun)
-            {
-                if (!strLoginToken.Contains("[ERROR]"))
-                {
-                    output += "Login SUCCESSFUL - valid token received : " + strLoginToken + "\r\n";
-                }
-                else
-                {
-                    output += strLoginToken + "INVALID token!" + "\r\n";
-                    return output;
-                }
-            }
-
             string[] listFiles = (string[])Directory.GetFiles(rootTargetPath, "*.*", SearchOption.TopDirectoryOnly).
                 Where(s => s.EndsWith(".avi") ||
                     s.EndsWith(".dat") ||
@@ -138,8 +123,33 @@ namespace AutoSubtitleDownloader
                     s.EndsWith(".x264") ||
                     s.EndsWith(".xvid")).ToArray();
 
+            //before doing any API call check if any files are found 
+            if (listFiles.Length == 0)
+            {
+                output += "Fount " + listFiles.Length + " video files. Nothing to do. Exit!";
+                return output;
+            }
+            else
+            {
+                output += "Fount " + listFiles.Length + " video files. Processing " + (boolVerboseRun ? ": \r\n" : "[");
+            }
+
+            //LOGIN
+            string strLoginToken = OpenSubtitleUtils.Login(URL_RPC, OPENSUBTITLES_USERNAME, OPENSUBTITLES_PASSWORD, OPENSUBTITLES_USERAGENT, OPENSUBTITLES_COMMUNICATION_LANG);
+            if (boolVerboseRun)
+            {
+                if (!strLoginToken.Contains("[ERROR]"))
+                {
+                    output += "Login SUCCESSFUL - valid token received : " + strLoginToken + "\r\n";
+                }
+                else
+                {
+                    output += strLoginToken + "INVALID token!" + "\r\n";
+                    return output;
+                }
+            }
+
             //START ITERATING FILES AND REQUEST SUBS
-            output += "Fount " + listFiles.Length + " video files. Processing " + (boolVerboseRun ? ": \r\n" : "[");
             if (boolVerboseRun) output += "-------------------------------------------------------" + "\r\n";
             foreach (string fileName in listFiles)
             {
