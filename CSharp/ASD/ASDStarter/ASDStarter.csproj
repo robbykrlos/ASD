@@ -53,9 +53,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AutoDownloadSubtitle\AutoDownloadSubtitle.csproj">
+    <ProjectReference Include="..\AutoDownloadSubtitle\AutoSubtitleDownloader.csproj">
       <Project>{0976350a-c033-4eae-b4cb-fec596eb8eb0}</Project>
-      <Name>AutoDownloadSubtitle</Name>
+      <Name>AutoSubtitleDownloader</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

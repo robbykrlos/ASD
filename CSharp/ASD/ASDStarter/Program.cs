@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ASDStarter
 {
@@ -10,7 +6,7 @@ namespace ASDStarter
     {
         static void Main(string[] args)
         {
-            var output = AutoDownloadSubtitle.ASD.Start(args);
+            var output = AutoSubtitleDownloader.ASD.Start(args);
             Console.WriteLine(output);
             
             Console.WriteLine("Press any key to continue...");

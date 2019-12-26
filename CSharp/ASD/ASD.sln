@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoDownloadSubtitle", "AutoDownloadSubtitle\AutoDownloadSubtitle.csproj", "{0976350A-C033-4EAE-B4CB-FEC596EB8EB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoSubtitleDownloader", "AutoDownloadSubtitle\AutoSubtitleDownloader.csproj", "{0976350A-C033-4EAE-B4CB-FEC596EB8EB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASDStarter", "ASDStarter\ASDStarter.csproj", "{28DF206E-14DD-4234-9C90-B0D0612E0024}"
 EndProject

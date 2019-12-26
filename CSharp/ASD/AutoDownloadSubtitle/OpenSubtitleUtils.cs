@@ -3,43 +3,50 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Xml;
-using ASD;
 
-namespace AutoDownloadSubtitle
+namespace AutoSubtitleDownloader
 {
     public static class OpenSubtitleUtils
     {
-        public static string Login(string URL_RPC, string username, string password)
-        {
-            string content = callWebService(URL_RPC, getLoginRequestData(username, password, "en", "TemporaryUserAgent"));
+        private const int INDEX_RESPONSE_TOKEN_VALUE = 10;
+        private const int INDEX_RESPONSE_LOGIN_STATUS_VALUE = 16;
+        private const int INDEX_RESPONSE_LOGIN_TOKEN_KEY = 7;
+        private const int INDEX_RESPONSE_LOGIN_STATUS_KEY = 13;
 
-            List<string> responseList = processXmlResponse(content);
-            if (checkLogin(responseList))
+        private const int INDEX_RESPONSE_LOGOUT_STATUS_KEY = 7;
+        private const int INDEX_RESPONSE_LOGOUT_STATUS_VALUE = 10;
+
+        public static string Login(string URL_RPC, string username, string password, string useragent, string lang)
+        {
+            string content = CallWebService(URL_RPC, GetLoginRequestData(username, password, lang, useragent));
+
+            List<string> responseList = ProcessXmlResponse(content);
+            if (CheckLogin(responseList))
             {
-                return responseList[10];//token
+                return responseList[INDEX_RESPONSE_TOKEN_VALUE];//token
             }
             else
             {
-                return "[ERROR] Login FAILED!" + responseList[16] + "\r\n";
+                return "[ERROR] Login FAILED!" + responseList[INDEX_RESPONSE_LOGIN_STATUS_VALUE] + "\r\n";
             }
         }
 
         public static string Logout(string URL_RPC, string token)
         {
-            string content = callWebService(URL_RPC, getLogoutRequestData(token));
+            string content = CallWebService(URL_RPC, GetLogoutRequestData(token));
 
-            List<string> responseList = processXmlResponse(content);
-            if (checkLogout(responseList))
+            List<string> responseList = ProcessXmlResponse(content);
+            if (CheckLogout(responseList))
             {
                 return "Logout Sucessfully!" + "\r\n";
             }
             else
             {
-                return "[ERROR] Logout FAILED!" + displayResponse(responseList) + "\r\n";
+                return "[ERROR] Logout FAILED!" + DisplayResponse(responseList) + "\r\n";
             }
         }
 
-        private static string callWebService(string URL_RPC, string strRequestData)
+        private static string CallWebService(string URL_RPC, string strRequestData)
         {
             WebRequest myReq = WebRequest.Create(URL_RPC);
             myReq.Method = "POST";
@@ -59,28 +66,28 @@ namespace AutoDownloadSubtitle
             return reader.ReadToEnd();
         }
 
-        private static bool checkLogin(List<string> responseList)
+        private static bool CheckLogin(List<string> responseList)
         {
             //displayResponse(responseList);
 
             return
-                responseList[7] == "token" &&
-                responseList[13] == "status" &&
-                responseList[16] == "200 OK";
+                responseList[INDEX_RESPONSE_LOGIN_TOKEN_KEY] == "token" &&
+                responseList[INDEX_RESPONSE_LOGIN_STATUS_KEY] == "status" &&
+                responseList[INDEX_RESPONSE_LOGIN_STATUS_VALUE] == "200 OK";
 
         }
 
-        private static bool checkLogout(List<string> responseList)
+        private static bool CheckLogout(List<string> responseList)
         {
             //displayResponse(responseList);
 
             return
-                responseList[7] == "status" &&
-                responseList[10] == "200 OK";
+                responseList[INDEX_RESPONSE_LOGOUT_STATUS_KEY] == "status" &&
+                responseList[INDEX_RESPONSE_LOGOUT_STATUS_VALUE] == "200 OK";
 
         }
 
-        public static List<string> processXmlResponse(string content)
+        public static List<string> ProcessXmlResponse(string content)
         {
             XmlTextReader xmlReader = new XmlTextReader(new StringReader(content));
 
@@ -103,43 +110,40 @@ namespace AutoDownloadSubtitle
             return responseList;
         }
 
-        public static string SearchSubtitle4Movie(string URL_RPC, string fileName, string strToken)
+        public static string SearchSubtitle4Movie(string URL_RPC, string fileName, string strToken, string subLanguages)
         {
             byte[] moviehash = MovieHash.ComputeMovieHash(fileName);
             string strMovieHash = MovieHash.ToHexadecimal(moviehash);
 
             FileInfo fileInfo = new FileInfo(fileName);
-            string strSearchRequestData = getSearchRequestData(strToken, strMovieHash, fileInfo.Length.ToString());
+            string strSearchRequestData = GetSearchRequestData(strToken, strMovieHash, fileInfo.Length.ToString(), subLanguages);
 
-            //Console.WriteLine(strMovieHash);
-            //Console.WriteLine(fileInfo.Length.ToString());
-
-            return callWebService(URL_RPC, strSearchRequestData);
+            return CallWebService(URL_RPC, strSearchRequestData);
         }
 
-        private static string getLoginRequestData(string username, string password, string lang, string useragent)
+        private static string GetLoginRequestData(string username, string password, string lang, string useragent)
         {
             return "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-                                    "<methodCall>" +
-                                    "<methodName>LogIn</methodName>" +
-                                    "<params>" +
-                                    "<param>" +
-                                    "<value><string>" + username + "</string></value>" +
-                                    "</param>" +
-                                    "<param>" +
-                                    "<value><string>" + password + "</string></value>" +
-                                    "</param>" +
-                                    "<param>" +
-                                    "<value><string>" + lang + "</string></value>" +
-                                    "</param>" +
-                                    "<param>" +
-                                    "<value><string>" + useragent + "</string></value>" +
-                                    "</param>" +
-                                    "</params>" +
-                                    "</methodCall>";
+                "<methodCall>" +
+                    "<methodName>LogIn</methodName>" +
+                    "<params>" +
+                        "<param>" +
+                            "<value><string>" + username + "</string></value>" +
+                        "</param>" +
+                        "<param>" +
+                            "<value><string>" + password + "</string></value>" +
+                        "</param>" +
+                        "<param>" +
+                            "<value><string>" + lang + "</string></value>" +
+                        "</param>" +
+                        "<param>" +
+                            "<value><string>" + useragent + "</string></value>" +
+                        "</param>" +
+                    "</params>" +
+                "</methodCall>";
         }
 
-        private static string getLogoutRequestData(string token)
+        private static string GetLogoutRequestData(string token)
         {
             return "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
             "<methodCall>" +
@@ -152,7 +156,7 @@ namespace AutoDownloadSubtitle
             "</methodCall>";
         }
 
-        private static string getSearchRequestData(string strToken, string strMovieHash, string strMovieSize)
+        private static string GetSearchRequestData(string strToken, string strMovieHash, string strMovieSize, string subLanguages)
         {
             return @"<?xml version=""1.0""?>
                             <methodCall>
@@ -168,7 +172,7 @@ namespace AutoDownloadSubtitle
                                    <struct>
                                     <member>
                                      <name>sublanguageid</name>
-                                     <value><string>rum,eng</string>
+                                     <value><string>" + subLanguages + @"</string>
                                      </value>
                                     </member>
                                     <member>
@@ -188,7 +192,7 @@ namespace AutoDownloadSubtitle
                             </methodCall>";
         }
 
-        private static string displayResponse(List<string> responseList)
+        private static string DisplayResponse(List<string> responseList)
         {
             string responseString = "";
             foreach (string str in responseList)

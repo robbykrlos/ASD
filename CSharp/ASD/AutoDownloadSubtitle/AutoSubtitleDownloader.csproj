@@ -8,8 +8,8 @@
     <ProjectGuid>{0976350A-C033-4EAE-B4CB-FEC596EB8EB0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutoDownloadSubtitle</RootNamespace>
-    <AssemblyName>AutoDownloadSubtitle</AssemblyName>
+    <RootNamespace>AutoSubtitleDownloader</RootNamespace>
+    <AssemblyName>AutoSubtitleDownloader</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>

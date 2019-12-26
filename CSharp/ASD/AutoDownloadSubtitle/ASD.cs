@@ -5,44 +5,53 @@ using System.Net;
 using System.IO;
 using System.IO.Compression;
 
-namespace AutoDownloadSubtitle
+namespace AutoSubtitleDownloader
 {
     public static class ASD
     {
-        public const int INDEX_PARAM_TARGET_PATH = 0;
-        public const int INDEX_PARAM_USERNAME = 1;
-        public const int INDEX_PARAM_PASSWORD = 2;
-        public const int INDEX_PARAM_SILENT_RUN = 3;
+        private static string APP_START_TIME = DateTime.Now.ToString("yyyy-MM-dd_HHmmss").ToString();
+
+        private const int INDEX_PARAM_TARGET_PATH = 0;
+        private const int INDEX_PARAM_SUB_LANGUAGES = 1;
+        private const int INDEX_PARAM_USERNAME = 2;
+        private const int INDEX_PARAM_PASSWORD = 3;
+        private const int INDEX_PARAM_SILENT_RUN = 4;
 
         // http://trac.opensubtitles.org/projects/opensubtitles/wiki/DevReadFirst
         public const string ARR_TARGET_EXTENSIONS = "*.avi,*.dat,*.divx,*.flc,*.flv,*.h264,*.m4v,*.mkv,*.moov,*.mov,*.movie,*.movx,*.mp4,*.mpe,*.mpeg,*.mpg,*.mpv,*.mpv2,*.ogg,*.ogm,*.omf,*.ps,*.swf,*.ts,*.vfw,*.vid,*.video,,*.wm,*.wmv,*.x264,*.xvid";
 
         //Server details + parameters
-        public const string URL_RPC = "https://api.opensubtitles.org:443/xml-rpc";
-        public const string OPENSUBTITLES_USERAGENT = "OSTestUserAgentTemp";
-        public const string SUB_LANG = "rum,eng";
+        private const string URL_RPC = "https://api.opensubtitles.org:443/xml-rpc";
+        private const string OPENSUBTITLES_USERAGENT = "TemporaryUserAgent";
+        private const string OPENSUBTITLES_COMMUNICATION_LANG = "en";
 
         public static string Start(string[] args)
         {
             string VersionNumber = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             string output = "";
-            output += "##########################################################\r\n";
-            output += "######     Auto Subtitles Downloader  (v"+ VersionNumber + ")    ######\r\n";
-            output += "##########################################################\r\n";
-            //first 3 params are mandatory
+            output += "##############################################################\r\n";
+            output += "##    Auto Subtitles Downloader  (v"+ VersionNumber + ")   Made by CRK   ##\r\n";
+            output += "##############################################################\r\n";
+            
+            //first 3 params are mandatory1
             if (args.Length < 1)
             {
-                output += " param 0 REQ: target folder path\r\n";
-                output += " param 1 OPT: username (works anonymous)\r\n";
-                output += " param 2 OPT: password (works anonymous)\r\n";
-                output += " param 3 OPT: silent run\r\n";
-                output += "##########################################################\r\n";
+                output += " p0:PATH [p1:languages [p2:username [p3:password [p4:/s|/q]]]]\r\n\r\n";
+                output += " p0 REQ: target folder path where video files are present.\r\n";
+                output += " p1 OPT: subtitle language(s), csv, ISO 639-2. Default rum,eng\r\n";
+                output += " p2 OPT: username (works anonymously too, ommit or \"\")\r\n";
+                output += " p3 OPT: password (works anonymously too, ommit or \"\")\r\n";
+                output += " p4 OPT: silent run (/q, /s silent/quiet. Default verbose)\r\n\r\n";
+                output += "NOTE: Existing subs will be backed up - not overwritten\r\n";
+                output += "HINT: works well with TotalCommander with keybind and arg %P\r\n";
+                output += "##############################################################\r\n";
                 return output;
             }
 
             string OPENSUBTITLES_USERNAME = "";
             string OPENSUBTITLES_PASSWORD = "";
+            string SUB_LANGUAGES = "rum,eng";//default;
 
             //READING ARGS
             string rootTargetPath = ".\\";
@@ -62,6 +71,12 @@ namespace AutoDownloadSubtitle
                 output += "[ERROR] Invalid target directory : " + rootTargetPath + "\r\n";
             }
 
+            //SUBTITLE LANGAUGES:
+            if (args.Length > INDEX_PARAM_SUB_LANGUAGES && args[INDEX_PARAM_SUB_LANGUAGES] != "")
+            {
+                SUB_LANGUAGES = args[INDEX_PARAM_SUB_LANGUAGES];
+            }
+
             //USERNAME AND PASSWORD:
             if (args.Length > INDEX_PARAM_PASSWORD && args[INDEX_PARAM_USERNAME] != "" && args[INDEX_PARAM_PASSWORD] != "")
             {
@@ -72,10 +87,11 @@ namespace AutoDownloadSubtitle
             //SILENT RUN
             if (args.Length > INDEX_PARAM_SILENT_RUN && args[INDEX_PARAM_SILENT_RUN] != "")
             {
-                boolVerboseRun = false;
+                boolVerboseRun = args[INDEX_PARAM_SILENT_RUN] != "/s" && args[INDEX_PARAM_SILENT_RUN] != "/q";
             }
 
-            string strLoginToken = OpenSubtitleUtils.Login(URL_RPC, OPENSUBTITLES_USERNAME, OPENSUBTITLES_PASSWORD);
+            //LOGIN
+            string strLoginToken = OpenSubtitleUtils.Login(URL_RPC, OPENSUBTITLES_USERNAME, OPENSUBTITLES_PASSWORD, OPENSUBTITLES_USERAGENT, OPENSUBTITLES_COMMUNICATION_LANG);
             if (boolVerboseRun)
             {
                 if (!strLoginToken.Contains("[ERROR]"))
@@ -122,8 +138,8 @@ namespace AutoDownloadSubtitle
                     s.EndsWith(".x264") ||
                     s.EndsWith(".xvid")).ToArray();
 
-
-            output += "Fount " + listFiles.Length + " video files. Processing ..." + "\r\n";
+            //START ITERATING FILES AND REQUEST SUBS
+            output += "Fount " + listFiles.Length + " video files. Processing " + (boolVerboseRun ? "..." : "[");
             if (boolVerboseRun) output += "-------------------------------------------------------" + "\r\n";
             foreach (string fileName in listFiles)
             {
@@ -132,9 +148,21 @@ namespace AutoDownloadSubtitle
                 string gzFile = fileNameNoExtension + ".gz";
                 string subFile = fileNameNoExtension + ".srt";
 
+                //Handle existing sub backup
+                string backupOutput = HandleBackupExistingSub(rootTargetPath, subFile, boolVerboseRun);
+                if (backupOutput.Contains("[ERROR]"))
+                {
+                    //exit app since there is the risk to overwrite existing subs which failed to be backed up.
+                    output += "\r\n\r\n" + backupOutput;
+                    output += "EXIT FORCEFULY : backup cannot be done. Risk to overwrite existing subs!";
+                    output += "\r\nWORKAROUND : to force download, backup existing subs yourself and/or manually delete existing subs from target folder.";
+                    return output;
+                }
+                output += backupOutput;
+
                 if (boolVerboseRun) output += fileName + "\r\n";
-                string strResponseData = OpenSubtitleUtils.SearchSubtitle4Movie(URL_RPC, fileName, strLoginToken);
-                List<string> listReponseSearch = OpenSubtitleUtils.processXmlResponse(strResponseData);
+                string strResponseData = OpenSubtitleUtils.SearchSubtitle4Movie(URL_RPC, fileName, strLoginToken, SUB_LANGUAGES);
+                List<string> listReponseSearch = OpenSubtitleUtils.ProcessXmlResponse(strResponseData);
                 for (int i = 0; i < listReponseSearch.Count; i++)
                 {
                     //output += "listReponseSearch[i]);
@@ -194,13 +222,35 @@ namespace AutoDownloadSubtitle
             }
 
             //LOGOUT
+            string logoutResponseOutput = OpenSubtitleUtils.Logout(URL_RPC, strLoginToken);
             if (boolVerboseRun)
             {
-                output += "\r\n" + OpenSubtitleUtils.Logout(URL_RPC, strLoginToken) + "\r\n";
+                output += "\r\n" + logoutResponseOutput + "\r\n";
             }
-            output += "DONE!" + "\r\n";
+            output += (boolVerboseRun ? "" : "] ") + "DONE!" + "\r\n";
 
             return output;
+        }
+
+        private static string HandleBackupExistingSub(string rootFolderPath, string subFileName, bool verbose)
+        {
+            string subFullFilePath = rootFolderPath + subFileName;
+            if (File.Exists(subFullFilePath))
+            {
+                try
+                {
+                    string backupFolder = rootFolderPath + "SUB_backups";
+                    if (!Directory.Exists(backupFolder)) Directory.CreateDirectory(backupFolder);
+                    string currentBackupFolder = backupFolder + "\\" + APP_START_TIME;
+                    if (!Directory.Exists(currentBackupFolder)) Directory.CreateDirectory(currentBackupFolder);
+                    File.Move(subFullFilePath, currentBackupFolder + "\\" + subFileName);
+                    return verbose ? "BACKUP existing sub sucessfuly done!\r\n" : ":";
+                } catch (Exception ex)
+                {
+                    return "[ERROR] BACKUP existing sub FAILED! " + ex.Message.ToString() + "\r\n";
+                }
+            }
+            return ""; //no backup needed - retur no message.
         }
     }
 }
