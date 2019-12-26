@@ -40,11 +40,11 @@ namespace AutoSubtitleDownloader
                 output += " p0:PATH [p1:languages [p2:username [p3:password [p4:/s|/q]]]]\r\n\r\n";
                 output += " p0 REQ: target folder path where video files are present.\r\n";
                 output += " p1 OPT: subtitle language(s), csv, ISO 639-2. Default rum,eng\r\n";
-                output += " p2 OPT: username (works anonymously too, ommit or \"\")\r\n";
-                output += " p3 OPT: password (works anonymously too, ommit or \"\")\r\n";
+                output += " p2 OPT: username (works anonymously too, omit or \"\")\r\n";
+                output += " p3 OPT: password (works anonymously too, omit or \"\")\r\n";
                 output += " p4 OPT: silent run (/q, /s silent/quiet. Default verbose)\r\n\r\n";
                 output += "NOTE: Existing subs will be backed up - not overwritten\r\n";
-                output += "HINT: works well with TotalCommander with keybind and arg %P\r\n";
+                output += "HINT: works well with TotalCommander with key-bind and arg %P\r\n";
                 output += "##############################################################\r\n";
                 return output;
             }
@@ -64,7 +64,7 @@ namespace AutoSubtitleDownloader
             }
             if (Directory.Exists(rootTargetPath))
             {
-                if (boolVerboseRun) output += "Target directory set : " + rootTargetPath + "\r\n";
+                if (boolVerboseRun) output += "Target directory : \r\n" + rootTargetPath + "\r\n";
             }
             else
             {
@@ -139,7 +139,7 @@ namespace AutoSubtitleDownloader
                     s.EndsWith(".xvid")).ToArray();
 
             //START ITERATING FILES AND REQUEST SUBS
-            output += "Fount " + listFiles.Length + " video files. Processing " + (boolVerboseRun ? "..." : "[");
+            output += "Fount " + listFiles.Length + " video files. Processing " + (boolVerboseRun ? ": \r\n" : "[");
             if (boolVerboseRun) output += "-------------------------------------------------------" + "\r\n";
             foreach (string fileName in listFiles)
             {
@@ -154,7 +154,7 @@ namespace AutoSubtitleDownloader
                 {
                     //exit app since there is the risk to overwrite existing subs which failed to be backed up.
                     output += "\r\n\r\n" + backupOutput;
-                    output += "EXIT FORCEFULY : backup cannot be done. Risk to overwrite existing subs!";
+                    output += "EXIT FORCEFULLY : backup cannot be done. Risk to overwrite existing subs!";
                     output += "\r\nWORKAROUND : to force download, backup existing subs yourself and/or manually delete existing subs from target folder.";
                     return output;
                 }

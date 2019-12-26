@@ -1,2 +1,2 @@
-php AutoSubtitleDownloader.php %cd%
+php AutoSubtitleDownloader.php %*
 pause
