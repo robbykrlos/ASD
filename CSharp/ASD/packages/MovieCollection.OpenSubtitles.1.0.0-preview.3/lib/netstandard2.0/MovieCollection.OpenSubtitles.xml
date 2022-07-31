@@ -1,0 +1,428 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MovieCollection.OpenSubtitles</name>
+    </assembly>
+    <members>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewDownload.FileId">
+            <summary>
+            Gets or sets the file id.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewDownload.SubFormat">
+            <summary>
+            Gets or sets the subtitle format.
+            </summary>
+            <remarks>
+            From <see cref="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.GetSubtitleFormatsAsync"/>.
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewDownload.FileName">
+            <summary>
+            Gets or sets the desired file name.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewDownload.InFps">
+            <summary>
+            Gets or sets in-fps for conversions.
+            </summary>
+            <remarks>
+            The <see cref="P:MovieCollection.OpenSubtitles.Models.NewDownload.InFps"/> and <see cref="P:MovieCollection.OpenSubtitles.Models.NewDownload.OutFps"/> must then be indicated.
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewDownload.OutFps">
+            <summary>
+            Gets or sets out-fps for conversions.
+            </summary>
+            <remarks>
+            The <see cref="P:MovieCollection.OpenSubtitles.Models.NewDownload.InFps"/> and <see cref="P:MovieCollection.OpenSubtitles.Models.NewDownload.OutFps"/> must then be indicated.
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewDownload.TimeShift">
+            <summary>
+            Gets or sets the time shift.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewDownload.ForceDownload">
+            <summary>
+            Gets or sets a value indicating whether subtitle file headers
+            should be set to "application/force-download".
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewFeatureSearch.Query">
+            <summary>
+            Gets or sets the title.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewFeatureSearch.FeatureId">
+            <summary>
+            Gets or sets the feature id.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewFeatureSearch.ImdbId">
+            <summary>
+            Gets or sets the imdb id.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewFeatureSearch.TmdbId">
+            <summary>
+            Gets or sets the tmdb id.
+            </summary>
+            <remarks>
+            Should be set with the <see cref="P:MovieCollection.OpenSubtitles.Models.NewFeatureSearch.Type"/> parameter to avoid conflicts.
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewFeatureSearch.Type">
+            <summary>
+            Gets or sets the type.
+            </summary>
+            <remarks>
+            Set empty to list all.
+            Should be: "movie", "tvshow" or "episode".
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewFeatureSearch.Year">
+            <summary>
+            Gets or sets the year.
+            </summary>
+            <remarks>
+            Can only be used in combination with a <see cref="P:MovieCollection.OpenSubtitles.Models.NewFeatureSearch.Query"/>.
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.AiTranslated">
+            <summary>
+            Gets or sets the ai translated value.
+            </summary>
+            <remarks>
+            exclude, include (default: exclude).
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.EpisodeNumber">
+            <summary>
+            Gets or sets the tv show episode number.
+            </summary>
+            <remarks>
+            For TV Shows.
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.ForeignPartsOnly">
+            <summary>
+            Gets or sets the foreign parts only value.
+            </summary>
+            <remarks>
+            include, only (default: include).
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.HearingImpaired">
+            <summary>
+            Gets or sets the hearing impaired value.
+            </summary>
+            <remarks>
+            include, exclude, only. (default: include).
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.Id">
+            <summary>
+            Gets or sets the id of the movie or episode.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.ImdbId">
+            <summary>
+            Gets or sets the imdb id of the movie or episode.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.Languages">
+            <summary>
+            Gets or sets the language codes (e.g. en, fr).
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.MachineTranslated">
+            <summary>
+            Gets or sets the machine translated value.
+            </summary>
+            <remarks>
+            exclude, include (default: exclude).
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.MovieHash">
+            <summary>
+            Gets or sets the hash of the movie.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.MovieHashMatch">
+            <summary>
+            Gets or sets the movie hash match value.
+            </summary>
+            <remarks>
+            include, only (default: include).
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.OrderBy">
+            <summary>
+            Gets or sets thr order of the returned results, accepts any of above fields.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.OrderDirection">
+            <summary>
+            Gets or sets the order direction of the returned results (asc, desc).
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.Page">
+            <summary>
+            Gets or sets the results page to display.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.ParentFeatureId">
+            <summary>
+            Gets or sets the parent feature id.
+            </summary>
+            <remarks>
+            For Tvshows.
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.ParentImdbId">
+            <summary>
+            Gets or sets the parent imdb id.
+            </summary>
+            <remarks>
+            For Tvshows.
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.ParentTmdbId">
+            <summary>
+            Gets or sets the parent tmdb id.
+            </summary>
+            <remarks>
+            For Tvshows.
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.Query">
+            <summary>
+            Gets or sets the filename or search text.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.SeasonNumber">
+            <summary>
+            Gets or sets the tv show season number.
+            </summary>
+            <remarks>
+            For TV Shows.
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.TmdbId">
+            <summary>
+            Gets or sets the tmdb id of the movie or episode.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.TrustedSources">
+            <summary>
+            Gets or sets the trusted sources value.
+            </summary>
+            <remarks>
+            include, only (default: include).
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.Type">
+            <summary>
+            Gets or sets the type value.
+            </summary>
+            <remarks>
+            movie, episode or all, (default: all).
+            </remarks>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.UserId">
+            <summary>
+            Gets or sets the user id for user uploads listing (To be used alone).
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch.Year">
+            <summary>
+            Gets or sets the movie or episode year filter.
+            </summary>
+        </member>
+        <member name="T:MovieCollection.OpenSubtitles.OpenSubtitlesOptions">
+            <summary>
+            The <see cref="T:MovieCollection.OpenSubtitles.OpenSubtitlesOptions"/> class.
+            </summary>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MovieCollection.OpenSubtitles.OpenSubtitlesOptions"/> class.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.OpenSubtitlesOptions.ApiAddress">
+            <summary>
+            Gets or sets the api address.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.OpenSubtitlesOptions.ApiKey">
+            <summary>
+            Gets or sets the api key.
+            </summary>
+        </member>
+        <member name="P:MovieCollection.OpenSubtitles.OpenSubtitlesOptions.ProductInformation">
+            <summary>
+            Gets or sets the name (and version) of the product using this library.
+            This will be sent to the server as part of user agent for diagnostic purposes.
+            </summary>
+            <remarks>
+            Not required if you set the user agent via the <see cref="P:System.Net.Http.HttpClient.DefaultRequestHeaders"/>.
+            </remarks>
+        </member>
+        <member name="T:MovieCollection.OpenSubtitles.OpenSubtitlesService">
+            <summary>
+            The <see cref="T:MovieCollection.OpenSubtitles.OpenSubtitlesService"/> class.
+            </summary>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.#ctor(System.Net.Http.HttpClient,MovieCollection.OpenSubtitles.OpenSubtitlesOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MovieCollection.OpenSubtitles.OpenSubtitlesService"/> class.
+            </summary>
+            <param name="httpClient">An instance of <see cref="T:System.Net.Http.HttpClient"/>.</param>
+            <param name="options">An instance of <see cref="T:MovieCollection.OpenSubtitles.OpenSubtitlesOptions"/>.</param>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.GetSubtitleFormatsAsync">
+            <summary>
+            List subtitle formats recognized by the api.
+            </summary>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.GetUserInformationAsync(System.String)">
+            <summary>
+            Gather informations about the user authenticated by a bearer token.
+            User information are already sent when user is authenticated, and the remaining downloads is
+            returned with each download, but you can also get these information here.
+            </summary>
+            <param name="token">User token created in the login endpoint.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.GetSubtitleLanguagesAsync">
+            <summary>
+            Get the languages table containing the codes and names used through the api.
+            </summary>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.LoginAsync(MovieCollection.OpenSubtitles.Models.NewLogin)">
+            <summary>
+            Create a token to authenticate a user.
+            </summary>
+            <param name="login">An instance of <see cref="T:MovieCollection.OpenSubtitles.Models.NewLogin"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.LogoutAsync(System.String)">
+            <summary>
+            Destroy a user token to end a session.
+            Bearer token is required for this endpoint.
+            </summary>
+            <param name="token">The user token created in the login endpoint.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.GetPopularFeaturesAsync(System.Collections.Generic.IList{System.String},System.String)">
+            <summary>
+            Discover popular features on opensubtitles.com, according to last 30 days downloads.
+            </summary>
+            <param name="languages">The language codes (en, fr).</param>
+            <param name="type">The type (movie or tvshow).</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.GetLatestSubtitlesAsync(System.Collections.Generic.IList{System.String},System.String)">
+            <summary>
+            Lists 60 latest uploaded subtitles.
+            </summary>
+            <param name="languages">The language codes (en, fr).</param>
+            <param name="type">The type (movie or tvshow).</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.GetMostDownloadedSubtitlesAsync(System.Collections.Generic.IList{System.String},System.String)">
+            <summary>
+            Discover popular subtitles, according to last 30 days downloads on opensubtitles.com.
+            This list can be filtered by language code or feature type (movie, episode).
+            </summary>
+            <param name="languages">The language codes (en, fr).</param>
+            <param name="type">The type (movie or tvshow).</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.GetSubtitleForDownloadAsync(MovieCollection.OpenSubtitles.Models.NewDownload,System.String)">
+            <summary>
+            Request a download url for a subtitle.
+            The download count is calculated on this action, not the file download itself.
+            </summary>
+            <remarks>
+            <para>The download URL is temporary, and cannot be used more than 3 hours,
+            so do not cache it, but you can download the file more than once if needed.</para>
+            The <see cref="P:MovieCollection.OpenSubtitles.Models.NewDownload.InFps"/> and <see cref="P:MovieCollection.OpenSubtitles.Models.NewDownload.InFps"/> must be indicated for
+            subtitle conversions, we want to make sure you know what you are doing, and therefore
+            collected the current FPS from the subtitle search result, or calculated it somehow.
+            </remarks>
+            <param name="download">An instance of the <see cref="T:MovieCollection.OpenSubtitles.Models.NewDownload"/> class.</param>
+            <param name="token">The user token created in the login endpoint.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.SearchSubtitlesAsync(MovieCollection.OpenSubtitles.Models.NewSubtitleSearch)">
+            <summary>
+            Find subtitle for a video file.
+            All parameters can be combined following various logics: searching by a specific external id (imdb, tmdb), a file moviehash, or a simple text query.
+            </summary>
+            <remarks>
+            For best results with automatic searching based on file analysis,
+            send the file name as a query together with the moviehash.
+            </remarks>
+            <param name="search">An instance of <see cref="T:MovieCollection.OpenSubtitles.Models.NewSubtitleSearch"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.SearchFeaturesAsync(MovieCollection.OpenSubtitles.Models.NewFeatureSearch)">
+            <summary>
+            With the "query" parameter, search for a Feature from a simple text input. Typically used for a text search or autocomplete.
+            With an ID, get basic information and subtitles count for a specific title.
+            </summary>
+            <remarks>
+            If you create an autocomplete, don't set a too small refresh limit,
+            remember you must not go over 40 requests per 10 seconds.
+            </remarks>
+            <param name="search">An instance of <see cref="T:MovieCollection.OpenSubtitles.Models.NewFeatureSearch"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesService.GuessitAsync(System.String)">
+            <summary>
+            Extracts as much information as possible from a video filename.
+            It has a very powerful matcher that allows to guess properties from a video using its filename only.
+            This matcher works with both movies and tv shows episodes.
+            </summary>
+            <param name="fileName">The file name to match.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="T:MovieCollection.OpenSubtitles.InconsistentConverter`1">
+            <summary>
+            Converts the inconsistent result sets.
+            </summary>
+            <typeparam name="T">The type of the object to deserialize.</typeparam>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.InconsistentConverter`1.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.InconsistentConverter`1.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.InconsistentConverter`1.CanConvert(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:MovieCollection.OpenSubtitles.OpenSubtitlesHasher">
+            <summary>
+            The Open Subtitles movie file hasher.
+            </summary>
+            <remarks>
+            Open Subtitles is using special hash function to match subtitle files against movie files.
+            Hash is not dependent on file name of movie file.
+            <para>Originally implemented by:
+            https://trac.opensubtitles.org/projects/opensubtitles/wiki/HashSourceCodes.</para>
+            </remarks>
+        </member>
+        <member name="M:MovieCollection.OpenSubtitles.OpenSubtitlesHasher.GetFileHash(System.String)">
+            <summary>
+            Computes the hash value for a file by using the default hash algorithm.
+            </summary>
+            <param name="filename">The file to compute the hash from.</param>
+            <returns>A string contaning the computed hash.</returns>
+        </member>
+    </members>
+</doc>

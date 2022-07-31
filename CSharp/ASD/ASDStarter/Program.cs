@@ -4,9 +4,9 @@ namespace ASDStarter
 {
     class Program
     {
-        static void Main(string[] args)
+        static async System.Threading.Tasks.Task Main(string[] args)
         {
-            var output = AutoSubtitleDownloader.ASD.Start(args);
+            var output = await AutoSubtitleDownloader.ASD.StartAsync(args);
             Console.WriteLine(output);
             
             Console.WriteLine("Press any key to continue...");
